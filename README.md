@@ -1,6 +1,14 @@
 🌟 **Rooman Knowledge Assistant**  
 **An Intelligent PDF-Powered Question-Answer Agent Built with Streamlit & LlamaIndex**
 
+## Demo Video
+
+<video width="640" controls>
+  <source src="assets/project.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+
 ---
 
 📘 **Overview**  
