@@ -16,8 +16,7 @@ DATA_DIR = "data"
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-# Debug – show files found
-st.write("Files in data:", os.listdir(DATA_DIR) if os.path.exists(DATA_DIR) else "Folder not found")
+# (Removed the file-list output)
 
 # ------------------------------------------------------
 # PREDEFINED Q&A
