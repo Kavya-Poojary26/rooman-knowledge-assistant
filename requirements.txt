@@ -1,8 +1,5 @@
-llama-index
-llama-index-embeddings-huggingface
-transformers
-sentence-transformers
-torch==2.3.0+cpu --index-url https://download.pytorch.org/whl/cpu
-pypdf
 streamlit
+llama-index
+pypdf
 python-dotenv
+

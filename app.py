@@ -2,16 +2,15 @@ import streamlit as st
 import os
 import re
 
-# LlamaIndex imports
+# LlamaIndex imports (NO embeddings, NO LLM)
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-
 
 # -----------------------------
-# FORCE RETRIEVAL-ONLY MODE
+# RETRIEVAL-ONLY MODE
 # -----------------------------
-Settings.llm = None   # No LLM
-Settings.embed_model = HuggingFaceEmbedding("BAAI/bge-small-en-v1.5")
+Settings.llm = None
+Settings.embed_model = None   # No embedding model
+
 
 # Ensure data folder exists
 DATA_DIR = "data"
@@ -99,7 +98,9 @@ def load_index_and_docs():
         return None, []
 
     docs = SimpleDirectoryReader(DATA_DIR).load_data()
-    index = VectorStoreIndex.from_documents(docs)
+
+    # Use simple keyword retrieval (no embeddings)
+    index = VectorStoreIndex.from_documents(docs, embed_model=None)
 
     return index, docs
 
@@ -108,7 +109,7 @@ index, DOCUMENTS = load_index_and_docs()
 
 
 # -----------------------------
-# RETRIEVAL-ONLY ENGINE
+# SIMPLE RETRIEVAL ENGINE
 # -----------------------------
 def keyword_retrieval(query):
     if not DOCUMENTS:
@@ -186,14 +187,9 @@ def extract_training_programs():
 def extract_clean_answer(raw_text, user_query):
     uq = user_query.lower()
 
-    # ONLY trigger training extractor when clearly asked
     if any(key in uq for key in [
-        "training program",
-        "training programs",
-        "courses offered",
-        "what courses",
-        "training offerings",
-        "job oriented career"
+        "training program", "training programs", "courses offered",
+        "what courses", "training offerings", "job oriented career"
     ]):
         extracted = extract_training_programs()
         if extracted:
@@ -218,7 +214,6 @@ if index is None:
 user_query = st.text_input("Ask the Rooman Knowledge Assistant:")
 
 if user_query:
-    # FIRST PRIORITY — predefined FAQ
     faq = check_predefined_answers(user_query)
 
     if faq:
