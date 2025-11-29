@@ -18,9 +18,6 @@ This tool helps with internal knowledge lookup, training support, FAQ automation
 ✅ **Dynamic PDF Knowledge Search**  
 Extracts and retrieves relevant text from PDFs placed inside the `data/` folder.
 
-✅ **Predefined Q&A Engine**  
-Fast retrieval for common or repeated questions using a dictionary-based lookup.
-
 ✅ **Smart Keyword Matching**  
 Understands important words in queries and returns the closest appropriate answer.
 
