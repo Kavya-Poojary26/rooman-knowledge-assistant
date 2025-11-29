@@ -32,6 +32,9 @@ Just push to GitHub → Deploy → Use.
 
 ---
 
+**Architecture diagram**
+<img width="1024" height="1024" alt="Image" src="https://github.com/user-attachments/assets/414dd594-de73-468e-b9df-3579f4c6997e" />
+
 🧰 **Tech Stack & Tools Used**
 
 🖥️ **Frontend**
