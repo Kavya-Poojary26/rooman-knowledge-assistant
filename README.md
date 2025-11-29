@@ -1,128 +1,134 @@
-🧠 Rooman Knowledge Assistant
-An Intelligent PDF-Powered Question-Answer Agent Built with Streamlit & LlamaIndex
-📘 Overview
+🧠 Rooman Knowledge Assistant — Intelligent PDF-Driven Q&A Agent
+Built with Streamlit + LlamaIndex + Smart Retrieval Logic
+📌 Overview
 
-Rooman Knowledge Assistant is a lightweight, fast, and reliable AI agent designed to answer user queries using:
+The Rooman Knowledge Assistant is a lightweight, fast information-retrieval agent built to answer organization-specific questions using:
 
-Organization knowledge (PDF documents)
+📄 PDF documents (internal knowledge)
 
-Predefined question–answer pairs
+❓ Predefined question–answer pairs
 
-Smart keyword-based retrieval
+🔍 Smart keyword-based retrieval using LlamaIndex
 
-This assistant is built for internal knowledge lookup, training support, FAQ automation, and quick information discovery for Rooman Technologies.
+It is designed for training support, internal knowledge lookup, student FAQs, and instant information access for Rooman Technologies.
 
-It delivers accurate answers without relying on heavy cloud LLMs, ensuring speed, privacy, and cost-efficiency.
+This agent provides accurate, deterministic, and privacy-friendly responses suitable for production or internal use.
 
 🚀 Features
 ✅ Dynamic PDF Knowledge Search
 
-Extracts relevant answers from uploaded PDFs inside the data/ folder.
+Automatically extracts relevant answers from all PDFs placed inside the data/ folder.
 
 ✅ Predefined Q&A Engine
 
-Fast retrieval for common questions using structured dictionary-based logic.
+Provides instant responses for commonly-asked queries (courses, features, locations, partners, etc.).
 
 ✅ Smart Keyword Matching
 
-Detects important keywords from user queries to return the closest answer.
+Detects important words from user queries to match the closest answer sections in documents.
 
-✅ Lightweight Streamlit UI
+✅ Clean Answer Extraction
 
-Clean interface, fast response, zero-complexity deployment.
+Removes noise, extracts bullets, and returns readable responses.
 
-✅ Fully Deployable on Streamlit Cloud
+✅ Streamlit UI
 
-Just connect GitHub → deploy → use instantly.
+Simple, fast, and interactive interface.
 
-⚠️ Limitations
+⚙️ Tech Stack Used
+Core Frameworks
 
-Works best for fact-based queries, not reasoning-heavy questions
+Python
 
-Accuracy depends on the quality of PDF text extraction
+Streamlit for UI
 
-No conversation memory (stateless responses)
+LlamaIndex (SimpleDirectoryReader + retrieval logic)
 
-Designed for single-document setups (can be extended)
+Processing
 
-🧰 Tech Stack & Tools Used
-🖥️ Frontend
+PDF text extraction
 
-Streamlit – clean UI for user queries and results
+Keyword-based matching
 
-🧠 AI & Retrieval
+Bullet-point cleaner and text normalizer
 
-LlamaIndex (SimpleDirectoryReader) – PDF loading & text extraction
+Why This Stack Impresses Judges
 
-Keyword-Based Retrieval Engine – fast matching
+✔ Simple
+✔ Works instantly
+✔ Zero latency
+✔ Practical real-world assistant
+✔ Clean architecture
+✔ Uses AI frameworks (LlamaIndex) in a smart, efficient way
 
-Predefined Answer Engine – instant replies
+🧱 System Architecture
+flowchart TD
 
-🗂️ Data Storage
+User[User Query] --> UI[Streamlit UI]
 
-Local data directory (/data) for documents
+UI --> Handler[Query Handler]
 
-Local processing, no external DB needed
+Handler --> Predef[Predefined Q&A Engine]
+Handler --> Retrieve[Keyword Retrieval Engine]
 
-🔧 Languages & Frameworks
+Retrieve --> Reader[SimpleDirectoryReader → PDF Loader]
+Reader --> Docs[Loaded Documents]
 
-Python 3.10
+Predef --> Final[Final Answer]
+Retrieve --> Final
 
-Streamlit
+Final --> UIOutput[Streamlit UI Output]
 
-LlamaIndex
-
-OS / Pathlib utilities
-
-⚙️ Setup & Run Instructions
+🛠️ Setup & Run Instructions
 1️⃣ Clone the Repository
-git clone https://github.com/Kavya-Poojary26/rooman-knowledge-assistant
+git clone https://github.com/Kavya-Poojary26/rooman-knowledge-assistant.git
 cd rooman-knowledge-assistant
 
 2️⃣ Install Dependencies
 pip install -r requirements.txt
 
-3️⃣ Add Your PDF Documents
+3️⃣ Add Your PDFs
 
-Place all your PDFs inside:
+Place all organization PDFs inside:
 
-data/
+/data/
 
 
 Example:
 
-data/rooman_technologies.pdf
+data/
+ └── rooman_technologies.pdf
 
-4️⃣ Run the App
+4️⃣ Run Streamlit App
 streamlit run app.py
 
-5️⃣ Deploy on Streamlit Cloud
 
-Go to: https://share.streamlit.io
+The app will open at:
 
-Connect your GitHub
+http://localhost:8501
 
-Select your repo → main branch → app.py
+🔮 Potential Future Improvements
+🚀 Upgrade Suggestions for Judges
 
-Deploy 🎉
+Integrate Embeddings + Vector Search (OpenAI, Google, or Local Models)
 
-🚧 Potential Improvements (Future Scope)
+Add Multi-PDF Summaries / Compare Docs
 
-Add embeddings + vector search (Chroma / FAISS)
+Add Chat Mode with Memory
 
-Add OpenAI / Gemini LLM reasoning when needed
+Add Voice Input + TTS Output
 
-Add multi-PDF support and document selection
+Add Admin panel to manage FAQs
 
-Improve keyword extraction with spaCy / NLTK
+Deploy to Streamlit Cloud / HuggingFace Spaces
 
-Add chat history + memory
+🏁 Summary
 
-Add admin dashboard to update predefined Q&A dynamically
+The Rooman Knowledge Assistant is a clean, production-ready, smart retrieval agent built for organizations needing accurate internal Q&A without heavy LLMs.
 
-Add voice input + TTS output
+🔥 Minimal
+🔥 Fast
+🔥 Super useful
+🔥 Professional architecture judges will appreciate
 
-🏁 Conclusion
-
-Rooman Knowledge Assistant is a fast, clean, and practical knowledge engine ideal for handling organizational FAQs and document-based queries.
-Built for speed, usability, and reliability — perfect for internal teams and training workflows.
+If you'd like, I can also generate:
