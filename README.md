@@ -1,123 +1,128 @@
-🌐 Rooman Knowledge Assistant
-🚀 Overview
+🧠 Rooman Knowledge Assistant
+An Intelligent PDF-Powered Question-Answer Agent Built with Streamlit & LlamaIndex
+📘 Overview
 
-This project is a lightweight, high-speed AI Query Assistant designed to answer user questions through two intelligence layers:
+Rooman Knowledge Assistant is a lightweight, fast, and reliable AI agent designed to answer user queries using:
 
-Predefined Q&A Engine – Instantly answers commonly asked queries using a curated internal knowledge base.
+Organization knowledge (PDF documents)
 
-Keyword-Based Retrieval Engine – Extracts relevant answers from uploaded PDF documents using keyword similarity and minimal text processing.
+Predefined question–answer pairs
 
-The system is optimized for speed, simplicity, and reliability—making it suitable for environments where rapid responses and easy deployment are essential.
+Smart keyword-based retrieval
 
-The entire flow is powered through an intuitive Streamlit UI, enabling seamless question-answering without complex configurations.
+This assistant is built for internal knowledge lookup, training support, FAQ automation, and quick information discovery for Rooman Technologies.
 
-✨ Features
-✅ Key Features
+It delivers accurate answers without relying on heavy cloud LLMs, ensuring speed, privacy, and cost-efficiency.
 
-🧠 Two-layer Query Resolution
+🚀 Features
+✅ Dynamic PDF Knowledge Search
 
-Predefined Q&A
+Extracts relevant answers from uploaded PDFs inside the data/ folder.
 
-PDF keyword-based search
+✅ Predefined Q&A Engine
 
-📄 Smart Document Reader using SimpleDirectoryReader
+Fast retrieval for common questions using structured dictionary-based logic.
 
-⚡ Fast and lightweight retrieval
+✅ Smart Keyword Matching
 
-🖥️ Clean Streamlit User Interface
+Detects important keywords from user queries to return the closest answer.
 
-📁 Automatic document loading from /data folder
+✅ Lightweight Streamlit UI
 
-🎯 Deterministic Answers (no hallucinations)
+Clean interface, fast response, zero-complexity deployment.
+
+✅ Fully Deployable on Streamlit Cloud
+
+Just connect GitHub → deploy → use instantly.
 
 ⚠️ Limitations
 
-Requires documents to be placed inside the data/ directory.
+Works best for fact-based queries, not reasoning-heavy questions
 
-Only supports PDF text extraction (no images inside PDF).
+Accuracy depends on the quality of PDF text extraction
 
-Keyword-based retrieval may miss context-heavy questions.
+No conversation memory (stateless responses)
 
-Works best when PDFs contain clear, structured text.
+Designed for single-document setups (can be extended)
 
-🧩 Tech Stack & APIs Used
+🧰 Tech Stack & Tools Used
+🖥️ Frontend
 
-Judges usually look for modern tools—so these are clearly highlighted:
+Streamlit – clean UI for user queries and results
 
-🖥️ Frontend / UI
+🧠 AI & Retrieval
 
-🔥 Streamlit – Main interface for user interaction
+LlamaIndex (SimpleDirectoryReader) – PDF loading & text extraction
 
-🧠 Frameworks / Libraries
+Keyword-Based Retrieval Engine – fast matching
 
-📚 LlamaIndex – SimpleDirectoryReader for loading PDF documents
+Predefined Answer Engine – instant replies
 
-🔍 Python PDF Processing – for text extraction and keyword retrieval
+🗂️ Data Storage
 
-🧵 LangChain – (optional internal utility for text splitting)
+Local data directory (/data) for documents
 
-🗂️ Other Tools & Utilities
+Local processing, no external DB needed
 
-OS / File Handling for dynamic folder creation
+🔧 Languages & Frameworks
 
-Regular Expressions for query processing
+Python 3.10
 
-Fuzzy Keyword Matching for retrieval accuracy
+Streamlit
 
-🛠️ Setup & Run Instructions
+LlamaIndex
+
+OS / Pathlib utilities
+
+⚙️ Setup & Run Instructions
 1️⃣ Clone the Repository
-git clone <your-repo-link>
-cd <project-folder>
+git clone https://github.com/Kavya-Poojary26/rooman-knowledge-assistant
+cd rooman-knowledge-assistant
 
 2️⃣ Install Dependencies
 pip install -r requirements.txt
 
-3️⃣ Ensure the /data Folder Exists
+3️⃣ Add Your PDF Documents
 
-Your code automatically creates it:
+Place all your PDFs inside:
 
-DATA_DIR = "data"
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
+data/
 
-4️⃣ Add PDFs
 
-Place your PDF files inside:
+Example:
 
-/data
-   └── your_docs.pdf
+data/rooman_technologies.pdf
 
-5️⃣ Run the Streamlit App
+4️⃣ Run the App
 streamlit run app.py
 
-🧱 System Architecture (High-Level)
-User Input → Streamlit UI → Query Handler
-                     ↓
-      ┌───────────────────────────────────────┐
-      │        Dual Intelligence Engine       │
-      │                                       │
-      │  1. Predefined Q&A Engine             │
-      │  2. PDF Keyword Retrieval Engine      │
-      │       → SimpleDirectoryReader         │
-      │       → Loaded Documents              │
-      └───────────────────────────────────────┘
-                     ↓
-            Final Answer → Streamlit Output
+5️⃣ Deploy on Streamlit Cloud
 
-🚀 Potential Improvements
+Go to: https://share.streamlit.io
 
-These make your project look forward-thinking:
+Connect your GitHub
 
-🔍 Add semantic search using embeddings (FAISS / ChromaDB)
+Select your repo → main branch → app.py
 
-🤖 Integrate LLMs for fallback responses
+Deploy 🎉
 
-📄 Support DOCX, TXT, images (OCR)
+🚧 Potential Improvements (Future Scope)
 
-📊 Add analytics dashboard for query statistics
+Add embeddings + vector search (Chroma / FAISS)
 
-🧠 Improve multi-document ranking
+Add OpenAI / Gemini LLM reasoning when needed
 
-🔧 Add admin panel to update predefined Q&A
+Add multi-PDF support and document selection
 
-🌐 Deploy online using Streamlit Cloud / Railway
+Improve keyword extraction with spaCy / NLTK
+
+Add chat history + memory
+
+Add admin dashboard to update predefined Q&A dynamically
+
+Add voice input + TTS output
+
+🏁 Conclusion
+
+Rooman Knowledge Assistant is a fast, clean, and practical knowledge engine ideal for handling organizational FAQs and document-based queries.
+Built for speed, usability, and reliability — perfect for internal teams and training workflows.
