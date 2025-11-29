@@ -14,10 +14,12 @@ Settings.llm = None
 Settings.embed_model = None   # No embedding model
 
 
-# Ensure data folder exists
-DATA_DIR = "data"
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
+DATA_DIR = os.path.join(os.getcwd(), "data")
+
+if not os.path.isdir(DATA_DIR):
+    st.error("❌ 'data/' folder is missing in the repository. Please create it and add PDF files.")
+    st.stop()
+
 
 
 # ------------------------------------------------------
