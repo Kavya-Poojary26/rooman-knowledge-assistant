@@ -1,6 +1,8 @@
 import streamlit as st
 import os
 import re
+st.write("Files in data:", os.listdir("data"))
+
 
 # LlamaIndex imports (NO embeddings, NO LLM)
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
