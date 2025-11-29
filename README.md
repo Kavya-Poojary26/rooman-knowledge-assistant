@@ -7,7 +7,6 @@
 Rooman Knowledge Assistant is a lightweight, fast, and reliable AI agent designed to answer user queries using:
 
 - **Organization knowledge (PDF documents)**
-- **Predefined question–answer pairs**
 - **Keyword-based retrieval**
 
 This tool helps with internal knowledge lookup, training support, FAQ automation, and quick information discovery — all **without cloud LLMs**, ensuring speed, privacy, and zero operational cost.
