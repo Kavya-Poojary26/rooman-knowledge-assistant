@@ -2,24 +2,22 @@ import streamlit as st
 import os
 import re
 
-# Debug – verify files exist
-st.write("Files in data:", os.listdir("data") if os.path.exists("data") else "Folder not found")
+# LlamaIndex imports (NO embeddings, NO LLM)
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
 
 # -----------------------------
-# PDF LOADER (WORKS ON STREAMLIT CLOUD)
+# RETRIEVAL-ONLY MODE
 # -----------------------------
-from llama_index.readers.file import PDFReader
-from llama_index.core import VectorStoreIndex, Settings
-
 Settings.llm = None
-Settings.embed_model = None   # No embeddings
+Settings.embed_model = None   # No embedding model
 
+# Ensure data folder exists
 DATA_DIR = "data"
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
 
-# Ensure data directory exists
-if not os.path.isdir(DATA_DIR):
-    st.error("❌ 'data/' folder is missing in the repository. Create it and add PDF files.")
-    st.stop()
+# Debug – show files found
+st.write("Files in data:", os.listdir(DATA_DIR) if os.path.exists(DATA_DIR) else "Folder not found")
 
 # ------------------------------------------------------
 # PREDEFINED Q&A
@@ -49,7 +47,7 @@ PREDEFINED_QA = {
 
     "what makes rooman different": """- India's only Omnichannel Training Institute (claimed)
 - Uses Flipped Classroom Model for online training
-- 1.2M+ students empowered
+- Large scale: 1.2M+ students empowered
 - 100+ physical centers across India""",
 
     "locations": """- Presence in 52 cities
@@ -61,19 +59,27 @@ PREDEFINED_QA = {
 - Government partnerships for skilling & reskilling"""
 }
 
+# ------------------------------------------------------
+# CHECK FOR PREDEFINED ANSWERS FIRST
+# ------------------------------------------------------
 def check_predefined_answers(query):
     q = query.lower()
 
     if any(word in q for word in ["training program", "courses offered", "what courses"]):
         return PREDEFINED_QA["training programs"]
+
     if any(word in q for word in ["key feature", "training approach", "features"]):
         return PREDEFINED_QA["key features"]
-    if any(word in q for word in ["experience", "years", "established"]):
+
+    if any(word in q for word in ["experience", "how many years", "years", "established"]):
         return PREDEFINED_QA["experience"]
+
     if any(word in q for word in ["different", "unique", "why rooman"]):
         return PREDEFINED_QA["what makes rooman different"]
+
     if any(word in q for word in ["location", "branch", "city", "center"]):
         return PREDEFINED_QA["locations"]
+
     if "partner" in q or "university" in q:
         return PREDEFINED_QA["partners"]
 
@@ -81,31 +87,37 @@ def check_predefined_answers(query):
 
 
 # -----------------------------
-# LOAD DOCUMENTS (PDFReader)
+# LOAD DOCUMENTS + BUILD INDEX
 # -----------------------------
 @st.cache_resource(show_spinner=True)
-def load_docs():
-    pdf_loader = PDFReader()
-    docs = []
+def load_index_and_docs():
+    files = [f for f in os.listdir(DATA_DIR) if f.lower().endswith((".pdf", ".txt", ".docx"))]
 
-    for file in os.listdir(DATA_DIR):
-        if file.lower().endswith(".pdf"):
-            path = os.path.join(DATA_DIR, file)
-            pdf_docs = pdf_loader.load_data(path)
-            docs.extend(pdf_docs)
+    if len(files) == 0:
+        return None, []
 
-    return docs
+    docs = SimpleDirectoryReader(DATA_DIR).load_data()
+
+    # Simple retrieval (no embeddings)
+    index = VectorStoreIndex.from_documents(docs, embed_model=None)
+
+    return index, docs
 
 
-DOCUMENTS = load_docs()
+index, DOCUMENTS = load_index_and_docs()
 
-if not DOCUMENTS:
-    st.error("❌ No readable PDF files found inside data/. Upload a valid PDF.")
+if index is None:
+    st.error("❌ No documents found in the data/ folder.\n\nPlease add PDF, TXT, or DOCX files and refresh.")
     st.stop()
 
-# Keyword search (very fast)
+# -----------------------------
+# SIMPLE KEYWORD RETRIEVAL
+# -----------------------------
 def keyword_retrieval(query):
-    q = query.lower()
+    if not DOCUMENTS:
+        return "❌ No documents found in the data/ folder."
+
+    q = query.lower().strip()
     matches = []
 
     for d in DOCUMENTS:
@@ -119,7 +131,82 @@ def keyword_retrieval(query):
     return "No relevant information found."
 
 
+class RetrievalOnlyEngine:
+    def query(self, q):
+        return keyword_retrieval(str(q))
+
+
+query_engine = RetrievalOnlyEngine()
+
+
+# -----------------------------
+# CLEAN BULLETS
+# -----------------------------
+def clean_bullets(text):
+    bullets = re.findall(r"[•\-]\s*(.+)", text)
+    cleaned = []
+
+    for b in bullets:
+        if len(b.strip()) > 1 and b not in cleaned:
+            cleaned.append(f"- {b.strip()}")
+
+    return "\n".join(cleaned) if cleaned else None
+
+
+# -----------------------------
+# TRAINING PROGRAM EXTRACTION
+# -----------------------------
+def extract_training_programs():
+    if not DOCUMENTS:
+        return None
+
+    output = []
+
+    for d in DOCUMENTS:
+        text = d.text
+
+        m = re.search(
+            r"(Training Offerings|Job-Oriented Career Programs)([\s\S]{0,2000})",
+            text,
+            re.IGNORECASE,
+        )
+        if not m:
+            continue
+
+        block = m.group(2)
+        bullets = clean_bullets(block)
+        if bullets:
+            for line in bullets.split("\n"):
+                if line not in output:
+                    output.append(line)
+
+    return "\n".join(output) if output else None
+
+
+# -----------------------------
+# FINAL ANSWER CLEANER
+# -----------------------------
+def extract_clean_answer(raw_text, user_query):
+    uq = user_query.lower()
+
+    if any(key in uq for key in [
+        "training program", "training programs", "courses offered",
+        "what courses", "training offerings", "job oriented career"
+    ]):
+        extracted = extract_training_programs()
+        if extracted:
+            return extracted
+
+    bullets = clean_bullets(raw_text)
+    if bullets:
+        return bullets
+
+    return raw_text.strip()[:3000]
+
+
+# -----------------------------
 # UI
+# -----------------------------
 st.title("🤖 Rooman Knowledge Assistant")
 
 user_query = st.text_input("Ask the Rooman Knowledge Assistant:")
@@ -131,8 +218,8 @@ if user_query:
         answer = faq
     else:
         with st.spinner("Searching your documents..."):
-            raw = keyword_retrieval(user_query)
-        answer = raw
+            raw = query_engine.query(user_query)
+        answer = extract_clean_answer(str(raw), user_query)
 
     st.subheader("Answer:")
     st.markdown(answer)
